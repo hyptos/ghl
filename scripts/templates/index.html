@@ -1,0 +1,34 @@
+<div class="col-md-10 col-md-offset-1 jumbotron">
+    <p>Hello world from index</p>
+    <table class="table">
+        <tr>
+            <th>repository</th>
+            <th>language</th>
+            <th>LoC</th>
+            <th>Total</th>
+        </tr>
+    <%
+        repos.each(function(repo){
+                %>
+                <tr>
+                    <td><%=repo.get('full_name')%></td>
+                    <% var bool = 1;%>
+                    <%for(var key in repo.get('stats')){
+                        if(bool === 1){
+                        %>
+                            <td><%=key%></td>
+                            <td><%=repo.get('stats')[key]%></td>
+                            <% bool = 0; %>
+                        <%
+                        } else {
+                            %></tr><tr><td></td>
+                             <td><%=key%></td>
+                            <td><%=repo.get('stats')[key]%></td>
+                            <% } } %>
+        </tr>
+                <%
+            });
+
+    %>
+    </table>
+</div>
