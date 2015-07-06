@@ -1,5 +1,8 @@
 <div class="col-md-10 col-md-offset-1 jumbotron">
-    <p>Hello world from index</p>
+    <div class="input-group">
+      <span class="input-group-addon" id="basic-addon1">@</span>
+      <input id="user" type="text" class="form-control" placeholder="<%=user%>" aria-describedby="basic-addon1">
+    </div>
     <table class="table">
         <tr>
             <th>repository</th>
@@ -9,11 +12,13 @@
         </tr>
     <%
         repos.each(function(repo){
+                    var totalLoc = 0;
                 %>
                 <tr>
                     <td><%=repo.get('full_name')%></td>
                     <% var bool = 1;%>
                     <%for(var key in repo.get('stats')){
+                        totalLoc += repo.get('stats')[key];
                         if(bool === 1){
                         %>
                             <td><%=key%></td>
@@ -24,6 +29,7 @@
                             %></tr><tr><td></td>
                              <td><%=key%></td>
                             <td><%=repo.get('stats')[key]%></td>
+                            <td><%=totalLoc%></td>
                             <% } } %>
         </tr>
                 <%
@@ -31,4 +37,8 @@
 
     %>
     </table>
+    <p><% console.log(owner)%></p>
+    <img src="<%=owner.avatar_url%>">
+    <p><%=owner.html_url%></p>
+    <p><%=owner.login%></p>
 </div>

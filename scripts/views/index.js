@@ -9,25 +9,37 @@ define([
     var indexView = Backbone.View.extend({
         el: $('#app'),
         template: _.template(IndexTemplate),
-        events: {},
+        events: {
+            'keypress #user': 'userInput',
+        },
         initialize: function() {
-            // console.log("initialize view search");
             this.repositorys = new Backbone.Collection();
+            this.owner = new Backbone.Model();
+            this.user = 'Username';
             this.listenTo(this.repositorys, 'all', this.render);
-            this.getAllRepos();
             this.render();
         },
         render: function() {
-            // console.log('render view search');
             var data = {
-                repos: this.repositorys
+                repos: this.repositorys,
+                owner: this.owner,
+                user: this.user
             };
             this.$el.html(this.template(data));
         },
-        getAllRepos: function() {
+        userInput: function(e) {
             var self = this;
-            $.ajax({
-                url: 'https://api.github.com/users/hyptos/repos',
+            if (e.keyCode === 13) {
+                self.user = $('#user').val();
+                this.getAllRepos(self.user).complete(function() {
+                    self.getAllStatistics();
+                });
+            }
+        },
+        getAllRepos: function(user) {
+            var self = this;
+            return $.ajax({
+                url: 'https://api.github.com/users/' + user + '/repos',
                 headers: {
                     Accept: 'application/vnd.github.v3+json'
                 },
@@ -38,21 +50,19 @@ define([
                 self.repositorys = new Backbone.Collection(res);
             }).error(function(res) {
                 console.log(res);
-            }).complete(function() {
-                self.render();
-                self.getAllStatistics();
             });
         },
         getAllStatistics: function() {
             var self = this;
             this.repositorys.each(function(repo) {
                 self.getStatisticRepo(repo.get('full_name'), repo.id);
+                self.owner = repo.get('owner');
             });
         },
         getStatisticRepo: function(owner, id) {
             console.log('getting stats about ' + owner);
             var self = this;
-            $.ajax({
+            return $.ajax({
                 url: 'https://api.github.com/repos/' + owner + '/languages',
                 headers: {
                     Accept: 'application/vnd.github.v3+json'
@@ -60,7 +70,6 @@ define([
                 type: 'GET',
                 DataType: 'jsonp'
             }).success(function(res) {
-                console.log('ok');
                 var model = self.repositorys.get(id);
                 model.set({
                     'stats': res
