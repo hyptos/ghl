@@ -16,6 +16,7 @@ define([
             this.repositorys = new Backbone.Collection();
             this.owner = new Backbone.Model();
             this.user = 'Username';
+            this.stats = new Backbone.Collection();
             this.listenTo(this.repositorys, 'all', this.render);
             this.render();
         },
@@ -23,6 +24,7 @@ define([
             var data = {
                 repos: this.repositorys,
                 owner: this.owner,
+                stats: this.stats,
                 user: this.user
             };
             this.$el.html(this.template(data));
@@ -71,6 +73,12 @@ define([
                 DataType: 'jsonp'
             }).success(function(res) {
                 var model = self.repositorys.get(id);
+                for (var it in res) {
+                    self.stats.add({
+                        language: it,
+                        cpt: res[it]
+                    });
+                }
                 model.set({
                     'stats': res
                 });

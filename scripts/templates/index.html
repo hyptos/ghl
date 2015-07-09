@@ -5,40 +5,26 @@
     </div>
     <table class="table">
         <tr>
-            <th>repository</th>
             <th>language</th>
             <th>LoC</th>
-            <th>Total</th>
+            <th>total</th>
         </tr>
-    <%
-        repos.each(function(repo){
-                    var totalLoc = 0;
-                %>
-                <tr>
-                    <td><%=repo.get('full_name')%></td>
-                    <% var bool = 1;%>
-                    <%for(var key in repo.get('stats')){
-                        totalLoc += repo.get('stats')[key];
-                        if(bool === 1){
-                        %>
-                            <td><%=key%></td>
-                            <td><%=repo.get('stats')[key]%></td>
-                            <% bool = 0; %>
-                        <%
-                        } else {
-                            %></tr><tr><td></td>
-                             <td><%=key%></td>
-                            <td><%=repo.get('stats')[key]%></td>
-                            <td><%=totalLoc%></td>
-                            <% } } %>
-        </tr>
-                <%
-            });
 
-    %>
+        <%
+            var totalLoc = 0;
+            stats.each(function(lang){
+                totalLoc += lang.get('cpt');
+        %>
+        <tr>                  
+            <td><%=lang.get('language')%></td>
+            <td><%=lang.get('cpt')%></td>
+        </tr>
+        <%
+            });
+        %>
     </table>
-    <p><% console.log(owner)%></p>
     <img src="<%=owner.avatar_url%>">
     <p><%=owner.html_url%></p>
     <p><%=owner.login%></p>
+    <p>total line code : <%=totalLoc%></p>
 </div>
