@@ -2,8 +2,10 @@ define([
     'jquery',
     'underscore',
     'backbone',
+    '../models/language',
+    '../collections/language',
     'text!templates/index.html'
-], function($, _, Backbone, IndexTemplate) {
+], function($, _, Backbone, LanguageModel, LanguageColl, IndexTemplate) {
     'use strict';
 
     var indexView = Backbone.View.extend({
@@ -16,7 +18,8 @@ define([
             this.repositorys = new Backbone.Collection();
             this.owner = new Backbone.Model();
             this.user = 'Username';
-            this.stats = new Backbone.Collection();
+            this.stats = new LanguageColl();
+            this.totalLoc = 0;
             this.listenTo(this.repositorys, 'all', this.render);
             this.render();
         },
@@ -25,7 +28,8 @@ define([
                 repos: this.repositorys,
                 owner: this.owner,
                 stats: this.stats,
-                user: this.user
+                user: this.user,
+                totalLoc: this.totalLoc
             };
             this.$el.html(this.template(data));
         },
@@ -74,10 +78,30 @@ define([
             }).success(function(res) {
                 var model = self.repositorys.get(id);
                 for (var it in res) {
-                    self.stats.add({
-                        language: it,
-                        cpt: res[it]
-                    });
+                    if (self.stats.length === 0) {
+                        self.stats.add({
+                            id: it,
+                            cpt: res[it]
+                        });
+                    } else {
+                        self.stats.each(function(lang) {
+                            console.log(lang);
+                            if (it === lang.get('id')) {
+                                console.log('on modifie !');
+                                lang.set({
+                                    id: lang.get('id'),
+                                    cpt: lang.get('cpt') + res[it]
+                                });
+                            } else {
+                                console.log('on ajoute !');
+                                self.stats.add({
+                                    id: it,
+                                    cpt: res[it]
+                                });
+                            }
+                        });
+                    }
+                    self.totalLoc += res[it];
                 }
                 model.set({
                     'stats': res

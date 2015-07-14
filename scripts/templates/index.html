@@ -7,17 +7,16 @@
         <tr>
             <th>language</th>
             <th>LoC</th>
-            <th>total</th>
+            <th>Percentage</th>
         </tr>
 
         <%
-            var totalLoc = 0;
             stats.each(function(lang){
-                totalLoc += lang.get('cpt');
         %>
         <tr>                  
-            <td><%=lang.get('language')%></td>
+            <td><%=lang.get('id')%></td>
             <td><%=lang.get('cpt')%></td>
+            <td><%=(lang.get('cpt')/totalLoc)*100%></td>
         </tr>
         <%
             });
