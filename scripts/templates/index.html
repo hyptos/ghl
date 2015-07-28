@@ -13,17 +13,18 @@
         <%
             stats.each(function(lang){
         %>
-        <tr>                  
+        <tr>
             <td><%=lang.get('id')%></td>
             <td><%=lang.get('cpt')%></td>
-            <td><%=(lang.get('cpt')/totalLoc)*100%></td>
+            <td><%=Math.round((lang.get('cpt')/totalLoc)*100 * 100) / 100%></td>
         </tr>
         <%
             });
         %>
     </table>
-    <img src="<%=owner.avatar_url%>">
-    <p><%=owner.html_url%></p>
-    <p><%=owner.login%></p>
-    <p>total line code : <%=totalLoc%></p>
+    <div class="card col-md-12">
+        <img class="img_user col-md-3" src="<%=owner.avatar_url%>">
+        <p class="col-md-9"><a href="<%=owner.html_url%>">@<%=owner.login%></a></p>
+        <p class="col-md-9">total line code : <%=totalLoc%></p>
+    </div>
 </div>
