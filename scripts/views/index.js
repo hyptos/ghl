@@ -36,8 +36,6 @@ define([
         userInput: function(e) {
             var self = this;
             if (e.keyCode === 13) {
-                self.stats.reset();
-                self.repositorys.reset();
                 self.user = $('#user').val();
                 this.getAllRepos(self.user).complete(function() {
                     self.getAllStatistics();
