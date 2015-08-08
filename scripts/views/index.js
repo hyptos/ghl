@@ -36,7 +36,6 @@ define([
         userInput: function(e) {
             var self = this;
             if (e.keyCode === 13) {
-                self.owner.clear();
                 self.stats.reset();
                 self.repositorys.reset();
                 self.user = $('#user').val();
@@ -90,13 +89,11 @@ define([
                         self.stats.each(function(lang) {
                             console.log(lang);
                             if (it === lang.get('id')) {
-                                console.log('on modifie !');
                                 lang.set({
                                     id: lang.get('id'),
                                     cpt: lang.get('cpt') + res[it]
                                 });
                             } else {
-                                console.log('on ajoute !');
                                 self.stats.add({
                                     id: it,
                                     cpt: res[it]
