@@ -1,10 +1,10 @@
 /*jshint -W031 */
 require.config({
     paths: {
-        'jquery': '/jquery/dist/jquery',
-        'underscore': '/underscore/underscore',
-        'backbone': '/backbone/backbone',
-        'text': '/lib/text'
+        'jquery': '../node_modules/jquery/dist/jquery',
+        'underscore': '../node_modules/underscore/underscore',
+        'backbone': '../node_modules/backbone/backbone',
+        'text': '../scripts/lib/text'
     },
     shim: {
         underscore: {
